@@ -73,27 +73,28 @@ def main_simulate(adjlist, nodes_to_rm):
     N = adjlist.shape[0]
     rm_nodes = []
     Avr_rhos = []
-    kk = 0
+    # kk = 0
     for i in nodes_to_rm:
         rm_nodes.append(i)
         rho = 0
-        for seed in range(N):
-            final_states = InfoSpread(adjlist, [seed], rm_nodes)
-            rho += sum(np.where(np.array(final_states) == 2, 1, 0))/N
-        rho=rho/500
         # for seed in range(N):
-        #     for s in range(100):
-        #         if kk % (N*100*len(nodes_to_rm)//1000) == 0:
-        #             print("{} / {}".format(kk, N*100))
-        #         kk += 1
-        #         final_states = InfoSpread(adjlist, [seed], rm_nodes)
-        #         rho += sum(np.where(np.array(final_states) == 2, 1, 0))/N
-        # rho=rho/500/100
+        #     final_states = InfoSpread(adjlist, [seed], rm_nodes)
+        #     rho += sum(np.where(np.array(final_states) == 2, 1, 0))/N
+        # rho=rho/500
+        for seed in range(N):
+            for s in range(100):
+                # if kk % (N*100*len(nodes_to_rm)//1000) == 0:
+                #     print("{} / {}".format(kk, N*100))
+                # kk += 1
+                final_states = InfoSpread(adjlist, [seed], rm_nodes)
+                rho += sum(np.where(np.array(final_states) == 2, 1, 0))/N
+        rho=rho/500/100
         
         Avr_rhos.append(rho)
         
     plt.plot(range(25), Avr_rhos,'ro')
-    plt.show()
+    plt.savefig("AR.png")
+    # plt.show()
 
 if __name__ == '__main__':
     attack_list_k = np.array(sorted_degrees)[:25,0]
